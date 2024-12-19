@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
 
-const mongoose = require('mongoose');
+const booksRoutes = require("./routes/books");
+const userRoutes = require("./routes/user");
+
 mongoose
   .connect(
-    "mongodb+srv://izumi:shinichi@cluster0.ar8rw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    "mongodb+srv://alixbocquier:ouinouin@cluster0.osykl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
@@ -24,13 +27,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("/api/books", (req, res, next) => {
-  console.log(req.body);
-  res.status(201).json({
-    message: 'Objet créé'
-  })
-});
-
+/*
 app.get("/api/books", (req, res, next) => {
   const stuff = [
     {
@@ -39,7 +36,7 @@ app.get("/api/books", (req, res, next) => {
       author: "Joyce Maynard",
       year: "2023",
       imageUrl:
-        "https://lh4.googleusercontent.com/proxy/cI3PqJ_FiZdYeoY0UQ0fu18FlO47NLJ3suaLQyvABCWbdtqpsQuCMfIPUXLq_wvJhSArLo0IAATp-nCl7bbSyj8EY4FmCI-Z",
+        "https://m.media-amazon.com/images/I/81RBlQzAE0L._UF1000,1000_QL80_.jpg",
       genre: "Roman",
     },
     {
@@ -62,5 +59,11 @@ app.get("/api/books", (req, res, next) => {
   ];
   res.status(200).json(stuff);
 });
+*/
+
+app.use("api/books", booksRoutes);
+app.use("api/auth", userRoutes);
 
 module.exports = app;
+
+
