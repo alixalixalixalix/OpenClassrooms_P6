@@ -1,6 +1,8 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
+const path = require('path');
 
 const booksRoutes = require("./routes/books");
 const userRoutes = require("./routes/user");
@@ -13,6 +15,7 @@ mongoose
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 app.use(express.json());
+app.use(cors());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -27,43 +30,8 @@ app.use((req, res, next) => {
   next();
 });
 
-/*
-app.get("/api/books", (req, res, next) => {
-  const stuff = [
-    {
-      _id: "oeihfzeoi",
-      title: "L'hôtel des oiseaux",
-      author: "Joyce Maynard",
-      year: "2023",
-      imageUrl:
-        "https://m.media-amazon.com/images/I/81RBlQzAE0L._UF1000,1000_QL80_.jpg",
-      genre: "Roman",
-    },
-    {
-      _id: "oeihfzeomoihi",
-      title: "Un chien de saison",
-      author: "Maurice Denuzière",
-      year: "1979",
-      imageUrl: "https://m.media-amazon.com/images/I/71DXHRXuZgL.jpg",
-      genre: "Roman humoristique",
-    },
-    {
-      _id: "oeihfzeomoihi",
-      title: "Hygiène de l'assassin",
-      author: "Amélie Nothomb",
-      year: "1992",
-      imageUrl:
-        "https://m.media-amazon.com/images/I/71rHMBlU1RL._AC_UF894,1000_QL80_.jpg",
-      genre: "Roman",
-    },
-  ];
-  res.status(200).json(stuff);
-});
-*/
-
-app.use("api/books", booksRoutes);
-app.use("api/auth", userRoutes);
+app.use("/api/books", booksRoutes);
+app.use("/api/auth", userRoutes);
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 module.exports = app;
-
-
