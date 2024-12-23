@@ -5,10 +5,10 @@ const multer = require('../middleware/multer-config')
 
 const booksCtrl = require("../controllers/books");
 
-router.post("/", auth, /*multer,*/ booksCtrl.createBook); // erreur si multer
-router.put("/:id", auth, /*multer,*/ booksCtrl.modifyBook);
+router.post("/", auth, multer, booksCtrl.createBook); // erreur si multer
+router.put("/:id", auth, multer, booksCtrl.modifyBook);
 router.delete("/:id", auth, booksCtrl.deleteBook);
-router.get("/:id", auth, booksCtrl.getOneBook);
+router.get("/:id", booksCtrl.getOneBook);
 router.get("/", booksCtrl.getAllBooks);
 
 module.exports = router;
