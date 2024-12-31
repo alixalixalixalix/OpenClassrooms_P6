@@ -81,3 +81,11 @@ exports.getAllBooks = (req, res, next) => {
     .then((books) => res.status(200).json(books))
     .catch((error) => res.status(400).json({ error }));
 };
+
+// Je sais pas quoi dire là-dedans pour afficher les bestRating
+// Ajout d'un tableau ? 
+exports.getBestRating = (req, res, next) => {
+};
+
+exports.addRating = (req, res, next) => {
+};
