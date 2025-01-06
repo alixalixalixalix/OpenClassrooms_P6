@@ -5,14 +5,14 @@ const User = require("../models/User");
 
 exports.signup = (req, res, next) => {
   bcrypt
-    .hash(req.body.password, 10)
+    .hash(req.body.password, 10) // Crypte un mdp
     .then((hash) => {
-      const user = new User({
+      const user = new User({ // Créé un nouvel objet User
         email: req.body.email,
         password: hash,
       });
       user
-        .save()
+        .save() // Save User en bdd
         .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
         .catch((error) => res.status(400).json({ error }));
     })
@@ -23,13 +23,13 @@ exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({ error: "Utilisateur non trouvé !" });
+        return res.status(401).json({ error: "Email ou mot de passe incorrect !" });
       }
       bcrypt
-        .compare(req.body.password, user.password)
+        .compare(req.body.password, user.password) // Compare le mdp renseigné et celui en bdd 
         .then((valid) => {
           if (!valid) {
-            return res.status(401).json({ error: "Mot de passe incorrect !" });
+            return res.status(401).json({ error: "Email ou mot de passe incorrect" });
           }
           res.status(200).json({
             userId: user._id,

@@ -35,6 +35,7 @@ const errorHandler = error => {
   }
 };
 
+// Appel de cette fonction à chaque fois qu'on va envoyer une requête à ce server
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
@@ -44,4 +45,5 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
+// Permet de diriger vers un port (3000)
 server.listen(port);
