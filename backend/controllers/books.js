@@ -92,39 +92,42 @@ exports.getBestRating = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-// Création d'un nouvel objet au sein du model book, dans le tableau ratings
-// Le nouvel objet contient un userId (string) + un grade (number)
-// Save pour enregistrer dans la base
+exports.addRating = (req, res, next) => {
+  Book.findOne({ _id: req.params.id })
+    .then((book) => {
+      // Vérifie si le livre existe
+      if (!book) {
+        return res.status(404).json({ message: "Livre non trouvé." });
+      }
+
+      // Nouvelle note
+      book.ratings.push({ userId: req.auth.userId, grade: req.body.rating });
+
+      // Moyenne
+      const totalGrades = book.ratings.reduce((sum, rating) => sum + rating.grade, 0);
+      book.averageRating = totalGrades / book.ratings.length;
+
+      // Save les infos
+      return book.save().then(() => {
+        res.status(201).json(book);
+      });
+    })
+    .catch((error) => {
+      res.status(400).json({ error });
+    });
+};
 
 /*
 exports.addRating = (req, res, next) => {
-  Book.updateOne({ $push: { userId: req.auth.userId, grade: req.grade } })
-
-    // .save()
+  Book.updateOne(
+    { _id: req.params.id }, 
+    { $push: { ratings: { userId: req.auth.userId, grade: req.body.rating } } }
+  )
     .then(() => {
-      res.status(201).json({ message: "Note enregistrée" });
+      res.status(201).json(Book);
     })
     .catch((error) => {
       res.status(400).json({ error });
     });
 };
 */
-
-exports.addRating = (req, res, next) => {
-  // Condition pour trouver le livre
-  const filter = { _id: req.params.id }; // Assure-toi que l'ID du livre est passé via les paramètres
-
-  const update = {
-    $push: {
-      ratings: { userId: req.auth.userId, grade: req.body.grade }, // Assure-toi que req.body.grade contient la note
-    },
-  };
-
-  Book.updateOne(filter, update)
-    .then(() => {
-      res.status(201).json({ message: "Note enregistrée" });
-    })
-    .catch((error) => {
-      res.status(400).json({ error });
-    });
-};
