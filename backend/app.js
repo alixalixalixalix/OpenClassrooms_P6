@@ -1,9 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 
-// Créé un application express
+// Création d'une application express
 const app = express();
 const mongoose = require("mongoose");
+
 const path = require('path');
 const dotenv = require('dotenv').config();
 
@@ -39,7 +40,6 @@ app.use("/api/books", booksRoutes);
 app.use("/api/auth", userRoutes);
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-// Permet d'accéder à app depuis les autres fichiers
 module.exports = app;
 
 

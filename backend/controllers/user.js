@@ -7,7 +7,8 @@ exports.signup = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10) // Crypte un mdp
     .then((hash) => {
-      const user = new User({ // Créé un nouvel objet User
+      // Création d'un nouvel objet User
+      const user = new User({ 
         email: req.body.email,
         password: hash,
       });

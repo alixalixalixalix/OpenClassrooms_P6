@@ -1,12 +1,12 @@
 const Book = require("../models/Book");
-const fs = require("fs");
+const fs = require("fs"); // Module permet de lire, écrire, ou suppr des fichiers
+const optimizeImg = require("../middleware/optimize-img");
 
 exports.createBook = (req, res, next) => {
   const bookObject = JSON.parse(req.body.book); // Depuis ajout de multer, on doit parser
   delete bookObject._id;
   delete bookObject._userId;
-  const book = new Book({
-    // Création d'un nouvel objet Book
+  const book = new Book({ // Création d'un nouvel objet Book
     ...bookObject, // Récupère l'ensemble des champs
     userId: req.auth.userId,
 
@@ -15,7 +15,7 @@ exports.createBook = (req, res, next) => {
     }`,
   });
   book
-    .save() // Save la donnée dans la bdd
+    .save()
     .then(() => {
       res.status(201).json({ message: "Objet enregistré" });
     })
@@ -116,18 +116,3 @@ exports.addRating = (req, res, next) => {
       res.status(400).json({ error });
     });
 };
-
-/*
-exports.addRating = (req, res, next) => {
-  Book.updateOne(
-    { _id: req.params.id }, 
-    { $push: { ratings: { userId: req.auth.userId, grade: req.body.rating } } }
-  )
-    .then(() => {
-      res.status(201).json(Book);
-    })
-    .catch((error) => {
-      res.status(400).json({ error });
-    });
-};
-*/

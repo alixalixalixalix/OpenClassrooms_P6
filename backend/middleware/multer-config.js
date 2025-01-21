@@ -1,4 +1,5 @@
 const multer = require("multer");
+const path = require("path");
 
 // Défini les extensions des fichiers reçus
 const MIME_TYPES = {
