@@ -5,22 +5,21 @@ const fs = require("fs");
 module.exports = (req, res, next) => {
   // Vérifie si un fichier a été uploadé
   if (!req.file) {
-    return next(); // Passe au middleware suivant si aucun fichier n'est fourni
+    return next();
   }
 
   const inputPath = req.file.path; // Chemin de l'image uploadée
-  const outputPath = path.join(
+  const outputPath = path.join( // Ajout de "opti_" dans le nom de l'img
     path.dirname(inputPath),
     `opti_${req.file.filename}`
-  );
+  ); 
 
-  // Optimise l'image
   sharp(inputPath)
-    .resize({ height: 500 }) // Redimensionne la hauteur tout en respectant le ratio
-    .webp({ quality: 80 }) // Convertit en WebP avec une qualité de 50
+    .resize({ height: 500 })
+    .webp({ quality: 80 })
     .toFile(outputPath)
     .then(() => {
-      // Supprime l'image originale après optimisation
+      // Supprime l'image originale
       fs.unlink(inputPath, (unlinkErr) => {
         if (unlinkErr) {
           console.error("Failed to delete original image:", unlinkErr);
