@@ -4,12 +4,25 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 exports.signup = (req, res, next) => {
+
+  const email = req.body.email?.trim();
+  const password = req.body.password?.trim();
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "L'adresse email n'est pas valide." });
+  }
+
+  if (password.length < 5) {
+    return res.status(400).json({ message: "Le mot de passe ne peut pas faire moins de 5 caractères." });
+  }
+
   bcrypt
-    .hash(req.body.password, 10) // Crypte un mdp
+    .hash(password, 10)
     .then((hash) => {
       // Création d'un nouvel objet User
       const user = new User({ 
-        email: req.body.email,
+        email: email,
         password: hash,
       });
       user
